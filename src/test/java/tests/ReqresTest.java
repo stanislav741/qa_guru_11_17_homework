@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
-import static org.assertj.guava.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -45,7 +44,7 @@ public class ReqresTest {
     @Test
     void apiResourceList() {
 
-    String responseResourceListExpected = "{\"page\":1,\"per_page\":6,\"total\":12,\"total_pages\":2,\"data\":" +
+        String responseResourceListExpected = "{\"page\":1,\"per_page\":6,\"total\":12,\"total_pages\":2,\"data\":" +
             "[{\"id\":1,\"name\":\"cerulean\",\"year\":2000,\"color\":\"#98B2D1\",\"pantone_value\":\"15-4020\"}," +
             "{\"id\":2,\"name\":\"fuchsia rose\",\"year\":2001,\"color\":\"#C74375\",\"pantone_value\":\"17-2031\"}," +
             "{\"id\":3,\"name\":\"true red\",\"year\":2002,\"color\":\"#BF1932\",\"pantone_value\":\"19-1664\"}" +
@@ -55,7 +54,7 @@ public class ReqresTest {
             "\"15-5217\"}],\"support\":{\"url\":\"https://reqres.in/#support-heading\"," +
             "\"text\":\"To keep ReqRes free, contributions towards server costs are appreciated!\"}}";
 
-    String responseResourceList =
+        String responseResourceList =
         given().
                 contentType(JSON).
         when().
@@ -70,12 +69,12 @@ public class ReqresTest {
     @Test
     void apiUserSingle() {
 
-    String responseUserSingleExpected = "{\"data\":{\"id\":2,\"email\":\"janet.weaver@reqres.in\",\"first_name\":" +
+        String responseUserSingleExpected = "{\"data\":{\"id\":2,\"email\":\"janet.weaver@reqres.in\",\"first_name\":" +
                 "\"Janet\",\"last_name\":\"Weaver\",\"avatar\":\"https://reqres.in/img/faces/2-image.jpg\"}," +
                 "\"support\":{\"url\":\"https://reqres.in/#support-heading\"," +
                 "\"text\":\"To keep ReqRes free, contributions towards server costs are appreciated!\"}}";
 
-    String responseUserSingle =
+        String responseUserSingle =
         given().
                 contentType(JSON).
         when().
@@ -85,6 +84,22 @@ public class ReqresTest {
                 extract().response().asString();
 
         assertEquals(responseUserSingleExpected, responseUserSingle);
+    }
+
+    @Test
+    void apiEntryCreate() {
+
+        String bodyEntryCreate = "{ \"name\": \"morpheus\", \"job\": \"leader\" }";
+
+        given().
+                body(bodyEntryCreate).
+                contentType(JSON).
+        when().
+                post("https://reqres.in/api/users").
+        then().
+                statusCode(201).
+                body("name", is("morpheus")).
+                body("job", is("leader"));
     }
 
 }
