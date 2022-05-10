@@ -12,8 +12,6 @@ public class ReqresTest {
     @Test
     void apiUserRegister() {
 
-//        Response: {"id":4,"token":"QpwL5tke4Pnpja7X4"}
-
         String bodyUserRegister = "{\"email\": \"eve.holt@reqres.in\", \"password\": \"pistol\"}";
 
         given().
